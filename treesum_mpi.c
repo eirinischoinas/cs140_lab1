@@ -21,11 +21,28 @@
  * Notes:
  *  1.  The return value for global sum is only valid on process 0
  */
-int global_sum(int my_int /* in */, int my_rank /* in */, int comm_sz /* in */,
-               MPI_Comm comm /* in */) {
-  int my_sum = my_int;
+int global_sum(int my_int, int my_rank, int comm_sz, MPI_Comm comm) {
+    int my_sum = my_int;
 
-  /* Your solution */
+    for (int step = 1; step < comm_sz; step *= 2) {
+        if (my_rank % (2 * step) == 0) {
+            int partner = my_rank + step;
+            if (partner < comm_sz) {
+                int recv_val;
+                MPI_Recv(&recv_val, 1, MPI_INT,
+                         partner, 0, comm, MPI_STATUS_IGNORE);
+                my_sum += recv_val;
+            }
+        } else {
+            int partner = my_rank - step;
+            MPI_Send(&my_sum, 1, MPI_INT,
+                     partner, 0, comm);
+            break;
+        }
+    }
+
+    return my_sum;
+}
 
   return my_sum;
 } /* Global_sum */
