@@ -1,9 +1,9 @@
-Last name of Student 1:
-First name of Student 1:
-Email of Student 1:
-Last name of Student 2:
-First name of Student 2:
-Email of Student 2:
+Last name of Student 1: Surapaneni
+First name of Student 1: Khilan
+Email of Student 1: ksurapaneni@ucsb.edu
+Last name of Student 2: Schoinas
+First name of Student 2: Renis
+Email of Student 2: eirini@ucsb.edu
 
 
 
