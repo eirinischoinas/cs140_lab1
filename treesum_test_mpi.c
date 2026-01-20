@@ -26,9 +26,53 @@ int global_sum(int my_int, int my_rank, int no_proc, MPI_Comm comm);
  * Test global_sum()
  * If successful, return NULL
  */
+/*-------------------------------------------------------------------
+ * Test global_sum()
+ * If successful, return NULL
+ */
 char *treesum_test1() {
-  /* Your solution */
-  return "Not tested";
+  int my_int, got, expected, pass;
+
+  my_int = my_rank + 1;
+  got = global_sum(my_int, my_rank, no_proc, comm);
+
+  if (my_rank == 0) {
+    expected = no_proc * (no_proc + 1) / 2;
+    pass = (got == expected);
+  }
+
+  if (my_rank == 0) {
+    for (int r = 1; r < no_proc; r++) {
+      MPI_Send(&pass, 1, MPI_INT, r, 100, comm);
+    }
+  } else {
+    MPI_Recv(&pass, 1, MPI_INT, 0, 100, comm, MPI_STATUS_IGNORE);
+  }
+
+  mu_assert("treesum_test1 case1 failed: rank0 did not get expected sum", pass);
+
+  my_int = (my_rank % 3) - 1;
+  got = global_sum(my_int, my_rank, no_proc, comm);
+
+  if (my_rank == 0) {
+    expected = 0;
+    for (int r = 0; r < no_proc; r++) {
+      expected += (r % 3) - 1;
+    }
+    pass = (got == expected);
+  }
+
+  if (my_rank == 0) {
+    for (int r = 1; r < no_proc; r++) {
+      MPI_Send(&pass, 1, MPI_INT, r, 101, comm);
+    }
+  } else {
+    MPI_Recv(&pass, 1, MPI_INT, 0, 101, comm, MPI_STATUS_IGNORE);
+  }
+
+  mu_assert("treesum_test1 case2 failed: rank0 did not get expected sum", pass);
+
+  return NULL;
 }
 
 /*-------------------------------------------------------------------

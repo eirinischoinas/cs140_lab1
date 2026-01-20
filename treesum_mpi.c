@@ -29,20 +29,15 @@ int global_sum(int my_int, int my_rank, int comm_sz, MPI_Comm comm) {
             int partner = my_rank + step;
             if (partner < comm_sz) {
                 int recv_val;
-                MPI_Recv(&recv_val, 1, MPI_INT,
-                         partner, 0, comm, MPI_STATUS_IGNORE);
+                MPI_Recv(&recv_val, 1, MPI_INT, partner, 0, comm, MPI_STATUS_IGNORE);
                 my_sum += recv_val;
             }
         } else {
             int partner = my_rank - step;
-            MPI_Send(&my_sum, 1, MPI_INT,
-                     partner, 0, comm);
+            MPI_Send(&my_sum, 1, MPI_INT, partner, 0, comm);
             break;
         }
     }
 
     return my_sum;
 }
-
-  return my_sum;
-} /* Global_sum */

@@ -246,11 +246,45 @@ int allocate_space(double **local_A, double **local_x, double **local_d,
 int init_matrix(double *local_A, double *local_x, double *local_d,
                 double *local_y, int blocksize, int n, int matrix_type,
                 int my_rank) {
+  int local_i, j;
+  int global_i;
+
   if (local_A == NULL || local_x == NULL || local_d == NULL ||
-      local_y == NULL || blocksize <= 0)
+      local_y == NULL || blocksize <= 0 || n <= 0 || my_rank < 0)
     return FAIL;
 
-  /* Your solution */
+  if (blocksize > n) return FAIL;
+
+  const double dval = (double)(2 * n - 1) / (double)n;
+
+  for (local_i = 0; local_i < blocksize; local_i++) {
+    local_x[local_i] = 0.0;
+    local_d[local_i] = dval;
+    local_y[local_i] = 0.0;
+  }
+
+  for (local_i = 0; local_i < blocksize; local_i++) {
+    global_i = my_rank * blocksize + local_i;
+
+    for (j = 0; j < n; j++) {
+      double val;
+
+      if (j == global_i) {
+        val = 0.0;
+      } else if (matrix_type == UPPER_TRIANGULAR) {
+        if (global_i < j) {
+          val = -1.0 / (double)n;
+        } else {
+          val = 0.0;
+        }
+      } else {
+        val = -1.0 / (double)n;
+      }
+
+      local_A[local_i * n + j] = val;
+    }
+  }
+
   return SUCC;
 }
 
