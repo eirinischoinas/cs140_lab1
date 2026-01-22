@@ -9,10 +9,15 @@ Email of Student 2: eirini@ucsb.edu
 
 Report for Question 2.a
 
+For the non upper-triangular case with n=4096 and t=1024, the single-process baseline completed in 23.56 seconds at 1.46 GFLOPS. 
+Running with 2 MPI processes reduced runtime to 12.17 seconds (2.8221 GFLOPS), giving a speedup of about 1.94x, 
+while 4 processes further reduced runtime to 6.02 seconds (5.7033 GFLOPS), a speedup of roughly 3.91x. 
+This corresponds to efficiencies of approximately 97% on 2 cores and 98% on 4 cores. 
+
+
+Report for Question 2.b
+
 For the upper-triangular case with n=4096 and t=1024, the single-process baseline completed in 10.43 seconds at 1.65 GFLOPS. 
 Running with 2 MPI processes reduced runtime to 7.62 seconds (2.25 GFLOPS), giving a speedup of about 1.37x, 
 while 4 processes further reduced runtime to 4.28 seconds (4.01 GFLOPS), a speedup of roughly 2.43x. 
 This corresponds to efficiencies of approximately 68% on 2 cores and 61% on 4 cores. 
-
-Report for Question 2.b
-
